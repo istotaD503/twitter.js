@@ -7,6 +7,7 @@ const routes = require('./routes');
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
+const bodyParser = require('body-parser')
 
 // var locals = {
 //     title : 'List of names',
@@ -29,6 +30,9 @@ app.use(morgan('dev'));
 
 //typical way of using express static middleware
 app.use(express.static(__dirname + '/public')); //express.static RETURN a function which may be used by middleware.
+
+app.use(bodyParser.urlencoded({extended: true})); //for HTML form submits
+app.use(bodyParser.json()); //for AJAX requests
 
 app.use(routes);
 
