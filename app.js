@@ -3,14 +3,15 @@ const app = express();
 const morgan = require('morgan') // logging middleware
 const chalk = require('chalk');
 const nunjucks = require('nunjucks');
+const routes = require('./routes')
 
-var locals = {
-    title : 'List of names',
-    people: [
-        {name: 'Jack'},
-        {name: 'John'}
-    ]
-};
+// var locals = {
+//     title : 'List of names',
+//     people: [
+//         {name: 'Jack'},
+//         {name: 'John'}
+//     ]
+// };
 
 // nunjucks.render('index.html',locals,(err, output) => {
 //     if (err) return console.error(err);
@@ -21,15 +22,10 @@ nunjucks.configure('views', {noCache: true}); // where to find views, cache off 
 app.set('view engine', 'html'); // what file extension do our template have
 app.engine('html', nunjucks.render); // how to render html templates
 
-app.use(morgan('dev'));
 
-app.get('/',(req, res) => {
-    res.render('index', locals)
-});
 
-app.get('/news',(req, res, next) => {
-    res.json({name: 'alex', lastName: 'May'});
-    next();
-})
+app.use(morgan('dev'))
 
-app.listen('3000',() => console.log('Server is up...'));
+app.use(routes);
+
+app.listen('1337',() => console.log('Server is up...'));
