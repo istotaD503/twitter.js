@@ -3,7 +3,10 @@ const app = express();
 const morgan = require('morgan') // logging middleware
 const chalk = require('chalk');
 const nunjucks = require('nunjucks');
-const routes = require('./routes')
+const routes = require('./routes');
+const fs = require('fs');
+const path = require('path');
+const mime = require('mime');
 
 // var locals = {
 //     title : 'List of names',
@@ -22,10 +25,20 @@ nunjucks.configure('views', {noCache: true}); // where to find views, cache off 
 app.set('view engine', 'html'); // what file extension do our template have
 app.engine('html', nunjucks.render); // how to render html templates
 
+app.use(morgan('dev'));
 
-
-app.use(morgan('dev'))
+//typical way of using express static middleware
+app.use(express.static(__dirname + '/public')); //express.static RETURN a function which may be used by middleware.
 
 app.use(routes);
 
 app.listen('1337',() => console.log('Server is up...'));
+
+// app.use(function(req,res, next) { // doesn't work!
+//     var mimeType = mime.lookup(req.path);
+//     fs.readFile('./public' + req.path, (err, fileBuffer) => {
+//         if (err) return next();
+//         res.header('Content-type', mimeType);
+//         res.send(fileBuffer);
+//     })
+// });
